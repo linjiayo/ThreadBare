@@ -32,6 +32,7 @@ public class ThreadTwoHashMapBroken extends Thread {
         ThreadTwoHashMapBroken tm = new ThreadTwoHashMapBroken(""+10);
 
         // What's wrong with this idea??...
+        // use of threads accessing the same shared object
         new Thread("Run of " + 6){
             public void run(){
                 tm.runMapOfSize(6);
@@ -48,14 +49,15 @@ public class ThreadTwoHashMapBroken extends Thread {
     private void runMapOfSize(int size) {
         System.out.println("Constructing HashMap of Size "+size);
         Integer threadCount = size;
+        HashMap<String, Thread> threadMap = new HashMap<>();
 
         for (int i = 0; i < threadCount; i++) {
-            this.threadMap.put("T"+ i, new ThreadTwoHashMapBroken("T"+ i));
+            threadMap.put("T"+ i, new ThreadTwoHashMapBroken("T"+ i));
         }
         System.out.println("Starting Threads in HashMap");
-        Set<String> names = this.threadMap.keySet();
+        Set<String> names = threadMap.keySet();
         for (String name : names) {
-            this.threadMap.get(name).start();
+            threadMap.get(name).start();
         }
         System.out.println("Thread HashMap, all have been started");
     }
